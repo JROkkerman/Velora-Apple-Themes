@@ -8,9 +8,9 @@ Dark coffee brown, caramel and warm beige.
 
 The package is **themes/espresso/**. Keep `velora-plugin.json`, this README and `LICENSE` together. The stable theme ID is **espresso**; its appearance is **dark**.
 
-Velora Music Apple bundles these palettes at build time. Developers sync this repository with `scripts/sync-apple-themes.py` in the app repository, then rebuild. Users choose **Espresso** in Settings → Themes. An in-app GitHub downloader is not implemented yet; copying a folder onto an iPhone does not install it.
+Velora Music Apple links the **VeloraAppleThemes** Swift Package, which bundles this palette automatically. Users choose **Espresso** in Settings → Themes. Developers add the library product in Xcode and use `VeloraThemeCatalog.bundled()` to read the collection. An in-app GitHub downloader is not implemented; the package is installed as an application dependency.
 
-See [the collection README](../../README.md) for the build workflow and [THEME_API.md](../../THEME_API.md) for integration into another Velora Apple app.
+See [the collection README](../../README.md) for Swift Package installation and [THEME_API.md](../../THEME_API.md) for integration into another Velora Apple app.
 
 ## Customize
 

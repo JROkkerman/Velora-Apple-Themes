@@ -1,7 +1,8 @@
 # Velora Apple theme API 1
 
-Themes contain colour data for native Velora applications. They do not contain
-Swift code, scripts, remote assets, fonts, account data or application logos.
+Individual theme folders contain colour data, not Swift code, scripts, remote
+assets, fonts, account data or application logos. The repository also provides
+the VeloraAppleThemes Swift library that validates and loads its bundled data.
 This format is independent of the Web theme API, although the initial IDs and
 colour tokens match so preferences can be shared across clients.
 
@@ -84,12 +85,24 @@ layout. Matching palettes does not imply pixel-identical native and Web screens.
   installed replacement is invalid. Future installers should override only the
   same ID, not replace the whole collection.
 - Keep fonts, layout, application features and app icons under application control.
-- Record repository, source commit, manifest hash, package path and version in
-  the consuming application's lock file. Update only through an explicit sync.
+- Keep the Swift Package version and commit pinned in `Package.resolved`. Each
+  theme retains its own version and repository in its bundled manifest.
 
-Music currently compiles all palettes into the application and bundles generated
-icons. `scripts/sync-apple-themes.py` in the app repository performs the mapping.
-It does not fetch or execute remote code. Runtime installation, updates and
-third-party theme browsing on an iPhone are future features, not part of API 1's
-current integration. Receipts, Finance and other apps need their own native
-consumer; these packages do not add those integrations automatically.
+## Swift Package
+
+`VeloraAppleThemes` is the library product and module. `VeloraThemeCatalog.bundled()`
+returns validated `VeloraTheme` values in the order listed in `catalog.json`.
+The package copies the theme folders into its own resource bundle. Consumers use
+`Bundle.module` through the library, not `Bundle.main`, so the catalogue works in
+applications, extensions and tests. Errors are thrown rather than terminating
+the app; callers retain neutral appearance on failure.
+
+The catalogue and themes are validated by Python checks and Swift tests in CI.
+Duplicate JSON keys are rejected by the source validator before release. Native
+loading also checks API versions, field and token allowlists, IDs, opaque native
+colours, file limits and package paths. No remote content is loaded or executed.
+
+Music maps the package directly to its native palette and keeps its own icons.
+Runtime installation, updates and third-party browsing on an iPhone are future
+features. Other Velora apps can add the same Swift library and map its tokens to
+their own native controls.

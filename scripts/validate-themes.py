@@ -63,6 +63,11 @@ def main():
     args = parser.parse_args()
     folders = sorted(args.themes_root.iterdir())
     require(0 < len(folders) <= 256, 'Expected between 1 and 256 theme folders')
+    catalog = json.loads((args.themes_root.parent / 'catalog.json').read_text(), object_pairs_hook=unique_keys)
+    require(set(catalog) == {'format', 'themes'} and type(catalog['format']) is int and catalog['format'] == 1, 'Invalid catalog format')
+    ids = catalog['themes']
+    require(isinstance(ids, list) and all(isinstance(item, str) for item in ids), 'Invalid catalog IDs')
+    require(len(ids) == len(set(ids)) and set(ids) == {folder.name for folder in folders}, 'Catalog must list every theme exactly once')
     for folder in folders:
         data = read_manifest(folder / 'velora-plugin.json')
         require((folder / 'README.md').read_text().startswith('# ' + data['name'] + ' for Velora Apple\n'), 'README title must name the Apple theme')

@@ -4,23 +4,46 @@ Shared native themes for the **Velora Apple** ecosystem. This is the Apple count
 
 Each theme has its own folder, manifest, stable ID and version in this one repository. **Light, Dark and Device are built-in application choices**, not plugins. Device follows the operating system.
 
-The palettes are suitable for Velora Music and future Velora Receipts, Finance and other Apple applications. Velora Music Apple consumes them today through its build-time sync workflow; other apps must implement [Apple theme API 1](THEME_API.md). There is no dependency on a web server or Music-specific artwork in these packages.
+The palettes are suitable for Velora Music and future Velora Receipts, Finance and other Apple applications. Velora Music Apple consumes them today through the Swift Package; other apps must implement [Apple theme API 1](THEME_API.md). There is no dependency on a web server or Music-specific artwork in these packages.
 
-## Use in Velora Music Apple
+## Install the Swift Package
 
-Clone this repository alongside the Apple app checkout:
+In Xcode choose **File → Add Package Dependencies** and enter:
 
-```sh
-git clone https://github.com/JROkkerman/Velora-Apple-Themes.git
-cd Velora_Music_Apple
-python3 scripts/sync-apple-themes.py --themes-root ../Velora-Apple-Themes
-python3 scripts/generate-theme-icons.py
-python3 scripts/generate_project.py
+```
+https://github.com/JROkkerman/Velora-Apple-Themes.git
 ```
 
-Then build the app in Xcode. **All themes ship with the app** and work offline. The app keeps its own logo and generates its own themed icons. The sync command records each source manifest's hash, version, repository path and commit. Run the same command with `--check` to check the native palette catalog without changing files.
+Choose version **1.0.0** or later within major version 1, then add the **VeloraAppleThemes** library product to your application target. Swift Package Manager bundles all theme JSON files automatically. The package supports iOS 17+, macOS 14+, tvOS 17+, watchOS 10+ and visionOS 1+ and has no external dependencies.
 
-This is a collection of colour-data packages, not a Swift Package or executable plugin. Runtime GitHub downloading/importing on iOS is not implemented yet. Future installers can select one `themes/<id>/` folder without installing the full collection. Each theme remains independently versioned.
+For a SwiftPM application:
+
+```swift
+.package(url: "https://github.com/JROkkerman/Velora-Apple-Themes.git", from: "1.0.0")
+// Add to the consuming target's dependencies:
+.product(name: "VeloraAppleThemes", package: "Velora-Apple-Themes")
+```
+
+Load the offline catalogue from the package resource bundle:
+
+```swift
+import VeloraAppleThemes
+
+let themes = try VeloraThemeCatalog.bundled()
+if let theme = themes.first(where: { $0.id == "linen" }) {
+    print(theme.name, theme.backgroundHex, theme.surfaceHex, theme.accentHex)
+}
+```
+
+Handle loading errors by keeping your application's neutral appearance. Full colour and preview tokens are available on each `VeloraTheme`; the three native hex conveniences omit the `#` prefix. `colorScheme` tells native controls whether a theme uses light or dark chrome.
+
+## Velora Music integration
+
+Velora Music Apple links **VeloraAppleThemes** in its Xcode target and reads the package directly for Settings, page backgrounds, the player and widget theme publishing. There is no copied or generated palette list in the app. **Light, Dark and Device** remain built in. Stable IDs preserve saved profile preferences.
+
+Xcode pins the resolved package version and commit in `Package.resolved`. Building requires the package to be resolved once; installed applications use the bundled resources without a network connection. All 47 themes ship with the app. This is an installed Swift Package dependency, not an in-app GitHub downloader or a runtime Swift plugin.
+
+Music's logo and alternate app icons remain application assets. The app's `scripts/generate-theme-icons.py --themes-root ../Velora-Apple-Themes` reads theme data when developers regenerate icons. A theme without a bundled alternate icon uses the primary app icon.
 
 ## Themes
 
@@ -79,7 +102,8 @@ This is a collection of colour-data packages, not a Swift Package or executable 
 1. Copy a folder in `themes/` and give a new theme a unique ID, folder and name.
 2. Edit `velora-plugin.json`. Keep `platform` set to `apple`, use hexadecimal colours and increment the version for updates.
 3. Update the theme README; use a title such as **Terracotta for Velora Apple**.
-4. Run `python3 scripts/validate-themes.py` and `python3 -m unittest discover -s tests`.
+4. Add a new ID to `catalog.json` (which controls display order).
+5. Run `python3 scripts/validate-themes.py`, `python3 -m unittest discover -s tests` and `swift test`.
 
 Themes control colours and light/dark native chrome. Layout, fonts, images, permissions and application behaviour stay with the application. IDs match the Web collection so a saved preference such as `linen` can select its native counterpart; the repositories can evolve independently.
 
