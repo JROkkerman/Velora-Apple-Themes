@@ -85,7 +85,7 @@ layout. Matching palettes does not imply pixel-identical native and Web screens.
   installed replacement is invalid. Future installers should override only the
   same ID, not replace the whole collection.
 - Keep fonts, layout, application features and app icons under application control.
-- Keep the Swift Package version and commit pinned in `Package.resolved`. Each
+- Keep the tested Swift Package commit pinned in `Package.resolved`. Each
   theme retains its own version and repository in its bundled manifest.
 
 ## Swift Package
