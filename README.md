@@ -1,6 +1,6 @@
 # Velora Apple Themes
 
-Shared native themes for the **Velora Apple** ecosystem. This is the Apple counterpart of [Velora Web Themes](https://github.com/JROkkerman/Velora-Web-Themes), with the same 47 starting palettes, including Crimson.
+Shared native themes for the **Velora Apple** ecosystem. This is the Apple counterpart of [Velora Web Themes](https://github.com/JROkkerman/Velora-Web-Themes), with the same 48 starting palettes, including Crimson and Ruby.
 
 Each theme has its own folder, manifest, stable ID and version in this one repository. **Light, Dark and Device are built-in application choices**, not plugins. Device follows the operating system.
 
@@ -14,12 +14,12 @@ In Xcode choose **File → Add Package Dependencies** and enter:
 https://github.com/JROkkerman/Velora-Apple-Themes.git
 ```
 
-Choose the **Commit** dependency rule and enter **113c3ffff052892d9d2bf3cafd63118874c758f5**, then add the **VeloraAppleThemes** library product to your application target. Swift Package Manager bundles all theme JSON files automatically. The package supports iOS 17+, macOS 14+, tvOS 17+, watchOS 10+ and visionOS 1+ and has no external dependencies.
+Choose the **Branch** dependency rule and enter **main**, then add the **VeloraAppleThemes** library product to your application target. Swift Package Manager bundles all theme JSON files automatically. The package supports iOS 17+, macOS 14+, tvOS 17+, watchOS 10+ and visionOS 1+ and has no external dependencies.
 
 For a SwiftPM application:
 
 ```swift
-.package(url: "https://github.com/JROkkerman/Velora-Apple-Themes.git", revision: "113c3ffff052892d9d2bf3cafd63118874c758f5")
+.package(url: "https://github.com/JROkkerman/Velora-Apple-Themes.git", branch: "main")
 // Add to the consuming target's dependencies:
 .product(name: "VeloraAppleThemes", package: "Velora-Apple-Themes")
 ```
@@ -41,7 +41,7 @@ Handle loading errors by keeping your application's neutral appearance. Full col
 
 Velora Music Apple links **VeloraAppleThemes** in its Xcode target and reads the package directly for Settings, page backgrounds, the player and widget theme publishing. There is no copied or generated palette list in the app. **Light, Dark and Device** remain built in. Stable IDs preserve saved profile preferences.
 
-Xcode pins the tested package commit in `Package.resolved`. Building requires the package to be resolved once; installed applications use the bundled resources without a network connection. All 47 themes ship with the app. This is an installed Swift Package dependency, not an in-app GitHub downloader or a runtime Swift plugin.
+Xcode pins the tested package commit in `Package.resolved`. Building requires the package to be resolved once; installed applications use the bundled resources without a network connection. All 48 themes ship with the app. This is an installed Swift Package dependency, not an in-app GitHub downloader or a runtime Swift plugin.
 
 Music's logo and alternate app icons remain application assets. The app's `scripts/generate-theme-icons.py --themes-root ../Velora-Apple-Themes` reads theme data when developers regenerate icons. A theme without a bundled alternate icon uses the primary app icon.
 
@@ -89,6 +89,7 @@ Music's logo and alternate app icons remain application assets. The app's `scrip
 | [Plum](themes/plum/) | Dark | 1.0.0 |
 | [Porcelain](themes/porcelain/) | Light | 1.0.0 |
 | [Rosewood](themes/rosewood/) | Dark | 1.0.0 |
+| [Ruby](themes/ruby/) | Dark | 1.0.0 |
 | [Ruby Night](themes/ruby-night/) | Dark | 1.0.0 |
 | [Saffron](themes/saffron/) | Dark | 1.0.0 |
 | [Sage](themes/sage/) | Light | 1.0.0 |

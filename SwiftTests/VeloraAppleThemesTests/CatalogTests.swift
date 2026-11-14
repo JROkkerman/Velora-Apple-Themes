@@ -5,9 +5,9 @@ import XCTest
 final class CatalogTests: XCTestCase {
     func testPackageResourcesLoadAllThemesInDisplayOrder() throws {
         let themes = try VeloraThemeCatalog.bundled()
-        XCTAssertEqual(themes.count, 47)
+        XCTAssertEqual(themes.count, 48)
         XCTAssertEqual(Array(themes.prefix(3).map(\.id)), ["linen", "ember", "harbor"])
-        XCTAssertEqual(themes.last?.id, "crimson")
+        XCTAssertEqual(themes.last?.id, "ruby")
         XCTAssertEqual(Set(themes.map(\.id)).count, themes.count)
         XCTAssertTrue(Set(themes.map(\.id)).isDisjoint(with: VeloraTheme.reservedIDs))
     }
